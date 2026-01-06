@@ -39,6 +39,30 @@ function App() {
         };
     }, [audioSrc]); // Re-run if source changes
 
+    // Global toggle listener
+    useEffect(() => {
+        if (!hasStarted) return;
+
+        const handleToggle = (e: MouseEvent) => {
+            // Ignore clicks on controls (e.g., input, button, audio player)
+            const target = e.target as HTMLElement;
+            if (target.closest('input') || target.closest('button') || target.closest('audio') || target.closest('label')) {
+                return;
+            }
+
+            if (audioRef.current) {
+                if (audioRef.current.paused) {
+                    audioRef.current.play();
+                } else {
+                    audioRef.current.pause();
+                }
+            }
+        };
+
+        window.addEventListener('click', handleToggle);
+        return () => window.removeEventListener('click', handleToggle);
+    }, [hasStarted]);
+
     // Update hasStarted when isPlaying changes (in case visualizer catches it)
     useEffect(() => {
         if (isPlaying) setHasStarted(true);

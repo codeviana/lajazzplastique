@@ -59,6 +59,7 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
 
             // Layout params
             const marginTop = 80;
+            const marginBottom = 150; // Space for audio player
             const marginLeft = 20;
             const marginRight = 20;
             const lineHeight = 24;
@@ -85,8 +86,8 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
                 if (currentPhaseText && Math.random() < 0.15) {
                     textToAdd = " " + currentPhaseText + " ";
                 } else {
-                    // Random char
-                    const chars = "abcdefghijklmnopqrstuvwxyz....,,,;;;   ";
+                    // Random char from expanded set
+                    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;':\",./<>?   ";
                     textToAdd = chars.charAt(Math.floor(Math.random() * chars.length));
                 }
 
@@ -106,7 +107,7 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
 
             // Scroll simulation
             const lines = textRef.current.split('\n');
-            const maxLines = Math.floor((canvas.height - marginTop) / lineHeight) - 1;
+            const maxLines = Math.floor((canvas.height - marginTop - marginBottom) / lineHeight) - 1;
             if (lines.length > maxLines) {
                 textRef.current = lines.slice(lines.length - maxLines).join('\n');
             }
@@ -138,7 +139,7 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
             window.removeEventListener('resize', resizeValues);
             cancelAnimationFrame(animationId);
         };
-    }, [getAudioData, isPlaying, audioRef]); // Added audioRef dependency
+    }, [getAudioData, isPlaying, audioRef]);
 
     return <canvas ref={canvasRef} className="whiteboard-canvas" />;
 };
