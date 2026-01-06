@@ -4,7 +4,7 @@ import { useAudioVisualizer } from './hooks/useAudioVisualizer';
 
 function App() {
     const { audioRef, getFrequencyData, isPlaying } = useAudioVisualizer();
-    const [audioSrc, setAudioSrc] = useState<string>('/default_album.mp3');
+    const [audioSrc, setAudioSrc] = useState<string>('default_album.mp3');
 
     // Attempt autoplay
     useEffect(() => {
