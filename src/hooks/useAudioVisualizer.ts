@@ -58,7 +58,7 @@ export const useAudioVisualizer = () => {
 
     const getFrequencyData = () => {
         if (analyserRef.current && dataArrayRef.current) {
-            analyserRef.current.getByteFrequencyData(dataArrayRef.current);
+            analyserRef.current.getByteFrequencyData(dataArrayRef.current as any);
             return dataArrayRef.current;
         }
         return new Uint8Array(0);
