@@ -10,7 +10,7 @@ const PHRASES = [
     { start: 0, end: 180, text: "aves de rapina" }, // 0:00 - 3:00
     { start: 180, end: 330, text: "francesca" },      // 3:00 - 5:30
     { start: 330, end: 510, text: "suor" },           // 5:30 - 8:30
-    { start: 510, end: 624, text: "senta" },          // 8:30 - 10:24
+    { start: 510, end: 624, text: "se senta" },          // 8:30 - 10:24
     { start: 624, end: 840, text: "capa sete" },      // 10:24 - 14:00
     { start: 840, end: 960, text: "trop eca" },       // 14:00 - 16:00
 ];
@@ -59,7 +59,8 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
 
             // Layout params
             const marginTop = 80;
-            const marginBottom = 220; // Increased space for audio player
+            const isMobile = window.innerWidth <= 768;
+            const marginBottom = isMobile ? 160 : 100; // Adjust space for audio player based on device
             const marginLeft = 20;
             const marginRight = 20;
             const lineHeight = 24;
