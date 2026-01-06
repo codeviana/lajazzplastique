@@ -43,6 +43,32 @@ body {
   margin-top: 2px;
 }
 
+.start-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: bold;
+  animation: blink 1s infinite;
+  z-index: 100;
+  pointer-events: none;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 .bottom-left-controls {
   position: absolute;
   bottom: 20px;

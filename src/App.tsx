@@ -6,12 +6,15 @@ function App() {
     const { audioRef, getFrequencyData, isPlaying } = useAudioVisualizer();
     const [audioSrc, setAudioSrc] = useState<string>('default_album.mp3');
 
+    const [hasStarted, setHasStarted] = useState(false);
+
     // Attempt autoplay
     useEffect(() => {
         const playAudio = async () => {
             if (audioRef.current) {
                 try {
                     await audioRef.current.play();
+                    setHasStarted(true);
                 } catch (e) {
                     console.log("Autoplay blocked, waiting for interaction", e);
                 }
@@ -24,8 +27,7 @@ function App() {
         // Fallback: Play on first interaction (click or key)
         const handleInteraction = () => {
             playAudio();
-            window.removeEventListener('click', handleInteraction);
-            window.removeEventListener('keydown', handleInteraction);
+            // Remove listeners once played (handled by hasStarted check mainly, but cleanup is good)
         };
 
         window.addEventListener('click', handleInteraction);
@@ -35,7 +37,12 @@ function App() {
             window.removeEventListener('click', handleInteraction);
             window.removeEventListener('keydown', handleInteraction);
         };
-    }, [audioSrc]);
+    }, [audioSrc]); // Re-run if source changes
+
+    // Update hasStarted when isPlaying changes (in case visualizer catches it)
+    useEffect(() => {
+        if (isPlaying) setHasStarted(true);
+    }, [isPlaying]);
 
     // Handle file upload
     const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +64,12 @@ function App() {
                     afonso viana
                 </div>
             </div>
+
+            {!hasStarted && (
+                <div className="start-overlay">
+                    PRESS ANY KEY TO START
+                </div>
+            )}
 
             <main className="whiteboard-area">
                 {/* We pass audioRef so Typewriter can read currentTime */}
