@@ -140,12 +140,12 @@ audio {
   }
 
   .bottom-left-controls {
-    bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
     left: 20px;
   }
 
   .bottom-right-player {
-    bottom: calc(30px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(80px + env(safe-area-inset-bottom, 0px));
     right: 20px;
     transform: scale(0.8);
     transform-origin: bottom right;
