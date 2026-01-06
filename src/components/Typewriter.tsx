@@ -57,6 +57,14 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
             for (let i = 0; i < 20; i++) { sum += data[i] || 0; }
             const energy = sum / 20;
 
+            // Layout params
+            const marginTop = 80;
+            const marginLeft = 20;
+            const marginRight = 20;
+            const lineHeight = 24;
+            const charWidth = 12; // Approx for 20px Courier
+            const maxCharsPerLine = Math.floor((canvas.width - marginLeft - marginRight) / charWidth);
+
             // Logic to add text
             if (isPlaying && energy > 180 && time - lastBeatTimeRef.current > 120) {
                 lastBeatTimeRef.current = time;
@@ -72,13 +80,24 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
                     }
                 }
 
+                let textToAdd = "";
                 // Probability check: 15% chance to type the special word if available
                 if (currentPhaseText && Math.random() < 0.15) {
-                    textRef.current += " " + currentPhaseText + " ";
+                    textToAdd = " " + currentPhaseText + " ";
                 } else {
                     // Random char
                     const chars = "abcdefghijklmnopqrstuvwxyz....,,,;;;   ";
-                    textRef.current += chars.charAt(Math.floor(Math.random() * chars.length));
+                    textToAdd = chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+
+                // Check if current last line needs wrapping
+                const currentLines = textRef.current.split('\n');
+                const lastLine = currentLines[currentLines.length - 1];
+
+                if (lastLine.length + textToAdd.length > maxCharsPerLine) {
+                    textRef.current += "\n" + textToAdd.trimStart(); // Wrap
+                } else {
+                    textRef.current += textToAdd;
                 }
 
                 // Random newline
@@ -87,7 +106,7 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
 
             // Scroll simulation
             const lines = textRef.current.split('\n');
-            const maxLines = Math.floor(canvas.height / 24) - 2;
+            const maxLines = Math.floor((canvas.height - marginTop) / lineHeight) - 1;
             if (lines.length > maxLines) {
                 textRef.current = lines.slice(lines.length - maxLines).join('\n');
             }
@@ -97,18 +116,16 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
             ctx.fillStyle = 'black';
             ctx.textBaseline = 'top';
 
-            let y = 40;
-            const lineHeight = 24;
-
             textRef.current.split('\n').forEach((line, i) => {
-                ctx.fillText(line, 40, y + (i * lineHeight));
+                ctx.fillText(line, marginLeft, marginTop + (i * lineHeight));
             });
 
             // Cursor
             if (cursorRef.current) {
-                const lastLine = textRef.current.split('\n').slice(-1)[0];
-                const cursorX = 40 + ctx.measureText(lastLine).width;
-                const cursorY = y + ((textRef.current.split('\n').length - 1) * lineHeight);
+                const currentLines = textRef.current.split('\n');
+                const lastLine = currentLines[currentLines.length - 1];
+                const cursorX = marginLeft + ctx.measureText(lastLine).width;
+                const cursorY = marginTop + ((currentLines.length - 1) * lineHeight);
                 ctx.fillRect(cursorX, cursorY, 12, 20);
             }
 
