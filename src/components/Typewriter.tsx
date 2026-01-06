@@ -59,7 +59,7 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
 
             // Layout params
             const marginTop = 80;
-            const marginBottom = 180; // Space for audio player
+            const marginBottom = 220; // Increased space for audio player
             const marginLeft = 20;
             const marginRight = 20;
             const lineHeight = 24;
