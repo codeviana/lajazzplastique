@@ -1,10 +1,10 @@
-import { useState, ChangeEvent, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Typewriter from './components/Typewriter';
 import { useAudioVisualizer } from './hooks/useAudioVisualizer';
 
 function App() {
     const { audioRef, getFrequencyData, isPlaying } = useAudioVisualizer();
-    const [audioSrc, setAudioSrc] = useState<string>('default_album.mp3');
+    const [audioSrc] = useState<string>('default_album.mp3');
 
     const [hasStarted, setHasStarted] = useState(false);
     const [showTracklist, setShowTracklist] = useState(false);
@@ -45,14 +45,7 @@ function App() {
         if (isPlaying) setHasStarted(true);
     }, [isPlaying]);
 
-    // Handle file upload
-    const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setAudioSrc(url);
-        }
-    };
+
 
     return (
         <div className="app-container">
@@ -93,13 +86,7 @@ function App() {
                 />
             </main>
 
-            {/* Bottom Left Controls */}
-            <div className="bottom-left-controls">
-                <label className="retro-button">
-                    Load Music
-                    <input type="file" accept="audio/*" onChange={handleFileUpload} style={{ display: 'none' }} />
-                </label>
-            </div>
+
 
             {/* Bottom Right Player */}
             <div className="bottom-right-player">

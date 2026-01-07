@@ -98,12 +98,7 @@ body {
   }
 }
 
-.bottom-left-controls {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  z-index: 10;
-}
+
 
 .bottom-right-player {
   position: absolute;
@@ -116,26 +111,7 @@ body {
   box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 0.5);
 }
 
-.retro-button {
-  background-color: var(--retro-gray);
-  border-top: 2px solid var(--retro-border-light);
-  border-left: 2px solid var(--retro-border-light);
-  border-right: 2px solid var(--retro-dark);
-  border-bottom: 2px solid var(--retro-dark);
-  padding: 5px 15px;
-  cursor: pointer;
-  font-weight: bold;
-  user-select: none;
-  font-family: 'Courier New', Courier, monospace;
-  display: inline-block;
-}
 
-.retro-button:active {
-  border-top: 2px solid var(--retro-dark);
-  border-left: 2px solid var(--retro-dark);
-  border-right: 2px solid var(--retro-border-light);
-  border-bottom: 2px solid var(--retro-border-light);
-}
 
 .whiteboard-area {
   width: 100%;

@@ -20,6 +20,8 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
     const textRef = useRef<string>("> ");
     const cursorRef = useRef<boolean>(true);
     const lastBeatTimeRef = useRef<number>(0);
+    const typingQueueRef = useRef<string>("");
+    const lastTypeTimeRef = useRef<number>(0);
 
     useEffect(() => {
         const cursorInterval = setInterval(() => {
@@ -67,8 +69,9 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
             const charWidth = 12; // Approx for 20px Courier
             const maxCharsPerLine = Math.floor((canvas.width - marginLeft - marginRight) / charWidth);
 
-            // Logic to add text
-            if (isPlaying && energy > 180 && time - lastBeatTimeRef.current > 120) {
+            // 1. BEAT DETECTION: Populate Queue
+            // Only add to queue if we aren't backed up too much (max 50 chars pending)
+            if (isPlaying && energy > 180 && time - lastBeatTimeRef.current > 120 && typingQueueRef.current.length < 50) {
                 lastBeatTimeRef.current = time;
 
                 // Determine current phase phrase
@@ -99,18 +102,30 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
                     textToAdd = words[Math.floor(Math.random() * words.length)] + " ";
                 }
 
-                // Check if current last line needs wrapping
-                const currentLines = textRef.current.split('\n');
+                // Decide wrapping NOW based on projected length.
+                // We use the last line of the *actual* text plus the *pending* text to decide.
+                const currentFullText = textRef.current + typingQueueRef.current;
+                const currentLines = currentFullText.split('\n');
                 const lastLine = currentLines[currentLines.length - 1];
 
                 if (lastLine.length + textToAdd.length > maxCharsPerLine) {
-                    textRef.current += "\n" + textToAdd.trimStart(); // Wrap
+                    // Add newline to queue before word
+                    typingQueueRef.current += "\n" + textToAdd.trimStart();
                 } else {
-                    textRef.current += textToAdd;
+                    typingQueueRef.current += textToAdd;
                 }
 
                 // Random newline
-                if (Math.random() > 0.98) textRef.current += "\n";
+                if (Math.random() > 0.98) typingQueueRef.current += "\n";
+            }
+
+            // 2. TYPING LOGIC: Consume Queue
+            const typingSpeed = 70; // ms per character (slower)
+            if (typingQueueRef.current.length > 0 && time - lastTypeTimeRef.current > typingSpeed) {
+                lastTypeTimeRef.current = time;
+                const char = typingQueueRef.current.charAt(0);
+                typingQueueRef.current = typingQueueRef.current.substring(1);
+                textRef.current += char;
             }
 
             // Scroll simulation
