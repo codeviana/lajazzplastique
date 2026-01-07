@@ -7,6 +7,7 @@ function App() {
     const [audioSrc, setAudioSrc] = useState<string>('default_album.mp3');
 
     const [hasStarted, setHasStarted] = useState(false);
+    const [showTracklist, setShowTracklist] = useState(false);
 
     // Attempt autoplay
     useEffect(() => {
@@ -57,9 +58,21 @@ function App() {
         <div className="app-container">
             {/* Top Right Title */}
             <div className="top-right-group">
-                <div className="top-right-title">
+                <div className="top-right-title" onClick={() => setShowTracklist(!showTracklist)} style={{ cursor: 'pointer' }}>
                     la jazz plastique
                 </div>
+                {showTracklist && (
+                    <div className="tracklist-dropdown">
+                        <ol>
+                            <li>aves de rapina</li>
+                            <li>francesca</li>
+                            <li>suor</li>
+                            <li>se senta</li>
+                            <li>capa sete</li>
+                            <li>trop eca</li>
+                        </ol>
+                    </div>
+                )}
                 <div className="top-right-subtitle">
                     afonso viana
                 </div>

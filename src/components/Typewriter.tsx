@@ -87,9 +87,16 @@ const Typewriter: React.FC<TypewriterProps> = ({ getAudioData, isPlaying, audioR
                 if (currentPhaseText && Math.random() < 0.15) {
                     textToAdd = " " + currentPhaseText + " ";
                 } else {
-                    // Random char from expanded set
-                    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;':\",./<>?   ";
-                    textToAdd = chars.charAt(Math.floor(Math.random() * chars.length));
+                    // Random words from specific list
+                    const words = [
+                        "la", "jazz", "plastique",
+                        "gato", "palpebra", "palma", "torno", "monte", "mudo", "molde", "mistico",
+                        "moeda", "quarenta", "bloque", "folque", "trinta", "bola", "recta", "placa",
+                        "plano", "quadro", "milhafre", "sem", "cem", "posto", "poste", "logro",
+                        "carencia", "fole", "folia", "acido", "fartote", "vasilhame", "bolacha",
+                        "boleiro", "croquete", "manteiga", "desterro", "polpa", "popa", "mormente"
+                    ];
+                    textToAdd = words[Math.floor(Math.random() * words.length)] + " ";
                 }
 
                 // Check if current last line needs wrapping
